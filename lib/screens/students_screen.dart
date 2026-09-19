@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:maple_tales_task/bloc/group_cubit/group_cubit.dart';
 
 import '../models/group_model.dart';
 import '../models/student_model.dart';
@@ -30,7 +32,10 @@ class _StudentsScreenState extends State<StudentsScreen> {
             decoration: BoxDecoration(
               color: theme.colorScheme.surface,
               borderRadius: BorderRadius.circular(14),
-              border: Border.all(color: theme.colorScheme.outlineVariant, width: 0.5),
+              border: Border.all(
+                color: theme.colorScheme.outlineVariant,
+                width: 0.5,
+              ),
             ),
             child: Row(
               children: [
@@ -50,15 +55,25 @@ class _StudentsScreenState extends State<StudentsScreen> {
                 Expanded(
                   child: Text(
                     student.name,
-                    style: theme.textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w500),
+                    style: theme.textTheme.bodyLarge?.copyWith(
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
                 ),
-                _ModeBadge(
-                  label: checkStudentInGroup(student) ? '${getStudentModeName(student)} · ${getStudentGroupName(student)}' : 'Class default',
-                  color: checkStudentInGroup(student) ? theme.colorScheme.tertiary : theme.colorScheme.secondary,
-                  bg: checkStudentInGroup(student)
-                      ? theme.colorScheme.tertiaryContainer
-                      : theme.colorScheme.secondaryContainer,
+                BlocBuilder<GroupCubit, List<GroupModel>>(
+                  builder: (context, state) {
+                    return _ModeBadge(
+                      label: checkStudentInGroup(student, state)
+                          ? '${getStudentModeName(student, state)} · ${getStudentGroupName(student, state)}'
+                          : 'Class default',
+                      color: checkStudentInGroup(student, state)
+                          ? theme.colorScheme.tertiary
+                          : theme.colorScheme.secondary,
+                      bg: checkStudentInGroup(student, state)
+                          ? theme.colorScheme.tertiaryContainer
+                          : theme.colorScheme.secondaryContainer,
+                    );
+                  },
                 ),
               ],
             ),
@@ -68,7 +83,7 @@ class _StudentsScreenState extends State<StudentsScreen> {
     );
   }
 
-  bool checkStudentInGroup(StudentModel student) {
+  bool checkStudentInGroup(StudentModel student, List<GroupModel> groups) {
     for (var group in groups) {
       if (group.students.contains(student)) {
         return true;
@@ -77,7 +92,7 @@ class _StudentsScreenState extends State<StudentsScreen> {
     return false;
   }
 
-  String getStudentGroupName(StudentModel student) {
+  String getStudentGroupName(StudentModel student, List<GroupModel> groups) {
     for (var group in groups) {
       if (group.students.contains(student)) {
         return group.name;
@@ -86,7 +101,7 @@ class _StudentsScreenState extends State<StudentsScreen> {
     return '';
   }
 
-  String getStudentModeName(StudentModel student) {
+  String getStudentModeName(StudentModel student, List<GroupModel> groups) {
     for (var group in groups) {
       if (group.students.contains(student)) {
         return group.mode?.name ?? 'Class Default';
@@ -107,16 +122,27 @@ class _ModeBadge extends StatelessWidget {
   final Color color;
   final Color bg;
 
-  const _ModeBadge({required this.label, required this.color, required this.bg});
+  const _ModeBadge({
+    required this.label,
+    required this.color,
+    required this.bg,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-      decoration: BoxDecoration(color: bg, borderRadius: BorderRadius.circular(20)),
+      decoration: BoxDecoration(
+        color: bg,
+        borderRadius: BorderRadius.circular(20),
+      ),
       child: Text(
         label,
-        style: TextStyle(color: color, fontSize: 12, fontWeight: FontWeight.w600),
+        style: TextStyle(
+          color: color,
+          fontSize: 12,
+          fontWeight: FontWeight.w600,
+        ),
       ),
     );
   }

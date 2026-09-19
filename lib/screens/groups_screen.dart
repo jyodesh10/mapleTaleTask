@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../bloc/group_cubit/group_cubit.dart';
 import '../models/group_model.dart';
 import '../models/mode_model.dart';
 import '../models/student_model.dart';
@@ -28,15 +30,19 @@ class _GroupsScreenState extends State<GroupsScreen> {
                 textAlign: TextAlign.center,
               ),
             )
-          : ListView.separated(
-              padding: const EdgeInsets.all(16),
-              itemCount: groups.length,
-              separatorBuilder: (_, _) => const SizedBox(height: 8),
-              itemBuilder: (context, index) {
-                final group = groups[index];
-                return GroupCard(
-                  group: group,
-                  onChanged: () => setState(() {}),
+          : BlocBuilder<GroupCubit, List<GroupModel>>(
+              builder: (context, groups) {
+                return ListView.separated(
+                  padding: const EdgeInsets.all(16),
+                  itemCount: groups.length,
+                  separatorBuilder: (_, _) => const SizedBox(height: 8),
+                  itemBuilder: (context, index) {
+                    final group = groups[index];
+                    return GroupCard(
+                      group: group,
+                      onChanged: () => setState(() {}),
+                    );
+                  },
                 );
               },
             ),
@@ -62,11 +68,7 @@ class _GroupsScreenState extends State<GroupsScreen> {
                   ElevatedButton(
                     onPressed: () {
                       if (newGroupName.isNotEmpty) {
-                        final newGroup = GroupModel(
-                          id: groups.length + 1,
-                          name: newGroupName,
-                        );
-                        setState(() => groups.add(newGroup));
+                        context.read<GroupCubit>().createGroup(newGroupName);
                         Navigator.of(context).pop();
                       }
                     },
@@ -136,7 +138,7 @@ class GroupCard extends StatelessWidget {
                   ),
                 ],
                 onChanged: (selectedMode) {
-                  group.mode = selectedMode;
+                  context.read<GroupCubit>().assignMode(group, selectedMode);
                   onChanged();
                 },
               ),
@@ -189,7 +191,7 @@ class GroupCard extends StatelessWidget {
                   ),
                   side: BorderSide.none,
                   onPressed: () {
-                    moveStudentToGroup(student, null);
+                    context.read<GroupCubit>().moveStudentToGroup(student, null);
                     onChanged();
                   },
                 ),
@@ -233,7 +235,7 @@ class GroupCard extends StatelessWidget {
                   ),
                   side: BorderSide.none,
                   onPressed: () {
-                    moveStudentToGroup(student, group);
+                    context.read<GroupCubit>().moveStudentToGroup(student, group);
                     onChanged();
                   },
                 ),
@@ -243,10 +245,4 @@ class GroupCard extends StatelessWidget {
       ),
     );
   }
-}
-
-void moveStudentToGroup(StudentModel student, GroupModel? targetGroup) {
-  student.group?.students.remove(student);
-  student.group = targetGroup;
-  targetGroup?.students.add(student);
 }

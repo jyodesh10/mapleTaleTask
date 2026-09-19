@@ -18,7 +18,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Maple Tales · Gruppen-Modi')),
+      appBar: AppBar(title: const Text('Maple Tales · Task')),
       body: BlocBuilder<NavCubit, int>(
         builder: (context, activeIndex) {
           return Row(

@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:maple_tales_task/bloc/nav_cubit/nav_cubit.dart';
 import 'package:maple_tales_task/screens/home_screen.dart';
 
+import 'bloc/group_cubit/group_cubit.dart';
+
 void main() => runApp(const MapleTalesApp());
 
 class MapleTalesApp extends StatelessWidget {
@@ -19,6 +21,7 @@ class MapleTalesApp extends StatelessWidget {
       home: MultiBlocProvider(
         providers: [
           BlocProvider<NavCubit>(create: (context) => NavCubit()),
+          BlocProvider<GroupCubit>(create: (context) => GroupCubit()),
         ],
         child: HomeScreen(),
       ),

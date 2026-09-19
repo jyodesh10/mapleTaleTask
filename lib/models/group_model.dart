@@ -12,5 +12,6 @@ class GroupModel {
 }
 
 List<GroupModel> groups = [
-
+  GroupModel(id: 1, name: 'Group 1'),
+  GroupModel(id: 2, name: 'Group 2'),
 ];
