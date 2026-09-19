@@ -20,13 +20,19 @@ class GroupCubit extends Cubit<List<GroupModel>> {
     emit([...state]); // new list reference so BlocBuilder rebuilds
   }
 
-  /// A student belongs to at most one group at a time — moving them into
-  /// a new group removes them from any previous one. targetGroup == null
-  /// sends them back to the class default.
+  void removeGroup(GroupModel group) {
+    for (var student in group.students) {
+      student.group = null;
+    }
+    state.remove(group);
+    emit([...state]);
+  }
+
   void moveStudentToGroup(StudentModel student, GroupModel? targetGroup) {
     student.group?.students.remove(student);
     student.group = targetGroup;
     targetGroup?.students.add(student);
     emit([...state]);
   }
+
 }

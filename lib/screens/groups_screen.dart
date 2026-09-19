@@ -16,38 +16,35 @@ class _GroupsScreenState extends State<GroupsScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-
-    return Scaffold(
+      return Scaffold(
       backgroundColor: theme.colorScheme.surfaceContainerLowest,
-      appBar: AppBar(title: const Text('Groups')),
-      body: groups.isEmpty
-          ? Center(
-              child: Text(
-                'No groups yet. Tap the + button to add a new group.',
-                style: theme.textTheme.bodyMedium?.copyWith(
-                  color: theme.colorScheme.onSurfaceVariant,
-                ),
-                textAlign: TextAlign.center,
-              ),
-            )
-          : BlocBuilder<GroupCubit, List<GroupModel>>(
-              builder: (context, groups) {
-                return ListView.separated(
+      appBar: AppBar(title: const Text('Groups'), backgroundColor: theme.colorScheme.surface, elevation: 0, foregroundColor: theme.colorScheme.onSurface),
+      body: BlocBuilder<GroupCubit, List<GroupModel>>(
+        builder: (context, groups) {
+          return groups.isEmpty
+              ? Center(
+                  child: Text(
+                    'No groups yet. Tap the + button to add a new group.',
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      color: theme.colorScheme.onSurfaceVariant,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                )
+              : ListView.separated(
                   padding: const EdgeInsets.all(16),
                   itemCount: groups.length,
                   separatorBuilder: (_, _) => const SizedBox(height: 8),
                   itemBuilder: (context, index) {
                     final group = groups[index];
-                    return GroupCard(
-                      group: group,
-                      onChanged: () => setState(() {}),
-                    );
+                    return GroupCard(group: group);
                   },
                 );
-              },
-            ),
+        },
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
+          final groupCubit = context.read<GroupCubit>();
           showDialog(
             context: context,
             builder: (context) {
@@ -68,7 +65,7 @@ class _GroupsScreenState extends State<GroupsScreen> {
                   ElevatedButton(
                     onPressed: () {
                       if (newGroupName.isNotEmpty) {
-                        context.read<GroupCubit>().createGroup(newGroupName);
+                        groupCubit.createGroup(newGroupName);
                         Navigator.of(context).pop();
                       }
                     },
@@ -87,9 +84,8 @@ class _GroupsScreenState extends State<GroupsScreen> {
 
 class GroupCard extends StatelessWidget {
   final GroupModel group;
-  final VoidCallback onChanged;
 
-  const GroupCard({super.key, required this.group, required this.onChanged});
+  const GroupCard({super.key, required this.group});
 
   @override
   Widget build(BuildContext context) {
@@ -139,14 +135,12 @@ class GroupCard extends StatelessWidget {
                 ],
                 onChanged: (selectedMode) {
                   context.read<GroupCubit>().assignMode(group, selectedMode);
-                  onChanged();
                 },
               ),
 
               FilledButton(
                 onPressed: () {
-                  groups.remove(group);
-                  onChanged();
+                  context.read<GroupCubit>().removeGroup(group);
                 },
                 style: FilledButton.styleFrom(
                   backgroundColor: theme.colorScheme.errorContainer,
@@ -191,8 +185,10 @@ class GroupCard extends StatelessWidget {
                   ),
                   side: BorderSide.none,
                   onPressed: () {
-                    context.read<GroupCubit>().moveStudentToGroup(student, null);
-                    onChanged();
+                    context.read<GroupCubit>().moveStudentToGroup(
+                      student,
+                      null,
+                    );
                   },
                 ),
               if (group.students.isEmpty)
@@ -235,8 +231,10 @@ class GroupCard extends StatelessWidget {
                   ),
                   side: BorderSide.none,
                   onPressed: () {
-                    context.read<GroupCubit>().moveStudentToGroup(student, group);
-                    onChanged();
+                    context.read<GroupCubit>().moveStudentToGroup(
+                      student,
+                      group,
+                    );
                   },
                 ),
             ],
