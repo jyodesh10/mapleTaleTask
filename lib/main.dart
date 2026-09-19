@@ -13,7 +13,7 @@ class MapleTalesApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Maple Tales · Group Modes',
+      title: 'Maple Tales Task',
       theme: ThemeData(
         colorSchemeSeed: const Color(0xFF2E7D32),
         useMaterial3: true,

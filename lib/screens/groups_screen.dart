@@ -137,7 +137,7 @@ class GroupCard extends StatelessWidget {
                   context.read<GroupCubit>().assignMode(group, selectedMode);
                 },
               ),
-
+              SizedBox(width: 12),
               FilledButton(
                 onPressed: () {
                   context.read<GroupCubit>().removeGroup(group);

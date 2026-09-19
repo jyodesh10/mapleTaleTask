@@ -23,21 +23,21 @@ class _StudentsScreenState extends State<StudentsScreen> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: TextField(
-                decoration: InputDecoration(
-                  hintText: 'Search students...',
-                  prefixIcon: const Icon(Icons.search),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    borderSide: BorderSide.none,
-                  ),
-                  filled: true,
-                  fillColor: theme.colorScheme.surface,
-                ),
-              ),
-            ),
+            // Padding(
+            //   padding: const EdgeInsets.all(12.0),
+            //   child: TextField(
+            //     decoration: InputDecoration(
+            //       hintText: 'Search students...',
+            //       prefixIcon: const Icon(Icons.search),
+            //       border: OutlineInputBorder(
+            //         borderRadius: BorderRadius.circular(8),
+            //         borderSide: BorderSide.none,
+            //       ),
+            //       filled: true,
+            //       fillColor: theme.colorScheme.surface,
+            //     ),
+            //   ),
+            // ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 30.0).copyWith(top: 20),
               child: Row(
@@ -58,6 +58,7 @@ class _StudentsScreenState extends State<StudentsScreen> {
             ListView.separated(
               padding: const EdgeInsets.all(16),
               itemCount: students.length,
+              physics: const NeverScrollableScrollPhysics(),
               shrinkWrap: true,
               separatorBuilder: (_, _) => const SizedBox(height: 8),
               itemBuilder: (context, index) {

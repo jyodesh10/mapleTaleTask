@@ -19,7 +19,31 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     MediaQueryData mediaQuery = MediaQuery.of(context);
     return Scaffold(
-      appBar: AppBar(title: const Text('Maple Tales · Task')),
+      appBar: AppBar(
+        title: Row(
+          children: [
+            Container(
+              height: 25,
+              width: 25,
+              margin: const EdgeInsets.only(right: 12),
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.primaryContainer,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Icon(
+                Icons.school,
+                size: 18,
+                color: Theme.of(context).colorScheme.onPrimaryContainer,
+              ),
+            ),
+            Text(
+              'Maple Tales Schule',
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+          ],
+        ),
+        centerTitle: false,
+      ),
       drawer: mediaQuery.size.width < 977
           ? Drawer(
               child: BlocBuilder<NavCubit, int>(
@@ -63,6 +87,25 @@ class _HomeScreenState extends State<HomeScreen> {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Container(
+            height: 42,
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.primaryContainer,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Center(
+              child: Text(
+                "4A (25/26)",
+                style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                  color: Theme.of(context).colorScheme.onPrimaryContainer,
+                  fontWeight: FontWeight.w600,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ),
+          SizedBox(height: 24),
           ListTile(
             contentPadding: EdgeInsets.zero,
             title: Text(
@@ -70,18 +113,38 @@ class _HomeScreenState extends State<HomeScreen> {
               style: Theme.of(context).textTheme.labelMedium,
             ),
           ),
-          DropdownButton<ModeModel>(
-            value: defaultModel,
-            underline: const SizedBox(),
-            elevation: 5,
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-            borderRadius: BorderRadius.circular(8),
-            items: modes
-                .map((m) => DropdownMenuItem(value: m, child: Text(m.name, style: Theme.of(context).textTheme.labelLarge)))
-                .toList(),
-            onChanged: (mode) {
-              if (mode != null) setState(() => defaultModel = mode);
-            },
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(
+                color: Theme.of(context).colorScheme.outlineVariant,
+                width: 0.5,
+              ),
+            ),
+            child: DropdownButton<ModeModel>(
+              value: defaultModel,
+              underline: const SizedBox(),
+              elevation: 5,
+              dropdownColor: Colors.white,
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+              borderRadius: BorderRadius.circular(8),
+              items: modes
+                  .map(
+                    (m) => DropdownMenuItem(
+                      value: m,
+                      child: Text(
+                        m.name,
+                        style: Theme.of(context).textTheme.labelLarge,
+                      ),
+                    ),
+                  )
+                  .toList(),
+              onChanged: (mode) {
+                if (mode != null) setState(() => defaultModel = mode);
+              },
+            ),
           ),
           SizedBox(height: 24),
           FilledButton.icon(
