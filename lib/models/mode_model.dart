@@ -8,7 +8,7 @@ class ModeModel {
 
 
 
-
+//Todo: Dynamically generate modes list from a firestore or API in the future. For now, we have a static list of modes for demonstration purposes.
 List<ModeModel> modes = [
   ModeModel(id: 1, name: 'Abenteuer-Modus'),
   ModeModel(id: 2, name: 'Lese-Modus'),

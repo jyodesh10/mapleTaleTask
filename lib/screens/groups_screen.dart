@@ -82,6 +82,7 @@ class _GroupsScreenState extends State<GroupsScreen> {
   }
 }
 
+//Todo: Editable group name.
 class GroupCard extends StatelessWidget {
   final GroupModel group;
 
@@ -140,6 +141,7 @@ class GroupCard extends StatelessWidget {
               SizedBox(width: 12),
               FilledButton(
                 onPressed: () {
+                  //Todo: Show confirmation dialog before deletion
                   context.read<GroupCubit>().removeGroup(group);
                 },
                 style: FilledButton.styleFrom(

@@ -8,6 +8,7 @@ class StudentModel {
   StudentModel({required this.id, required this.name, this.group});
 }
 
+//Todo: Dynaimically generate students list from a firestore or API in the future. For now, we have a static list of students for demonstration purposes.
 List<StudentModel> students = [
   StudentModel(id: 1, name: 'Alice',),
   StudentModel(id: 2, name: 'Bob',),
